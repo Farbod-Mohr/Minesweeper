@@ -20,11 +20,19 @@
 
 ##### PowerShell:
 ```powershell
-cmake --build "out\build\GCC 6.3.0 mingw32"
+mkdir -Force build
+cd build
+cmake ..
+cmake --build .
+cd ..
 ```
 ##### Bash:
 ```bash
-cmake --build "out/build/GCC 6.3.0 mingw32"
+mkdir -p build
+cd build
+cmake ..
+cmake --build .
+cd ..
 ```
 
 ---
@@ -33,9 +41,9 @@ cmake --build "out/build/GCC 6.3.0 mingw32"
 
 ##### PowerShell
 ```powershell
-cmake --build "out\build\GCC 6.3.0 mingw32"; .\out\build\GCC` 6.3.0` mingw32\Minesweeper.exe
+cmake --build "build"; .\build\Debug\Minesweeper.exe
 ```
 ##### Bash
 ```bash
-cmake --build "out/build/GCC 6.3.0 mingw32" && "./out/build/GCC 6.3.0 mingw32/Minesweeper.exe"
+cmake --build "build" && ./build/Debug/Minesweeper.exe
 ```
