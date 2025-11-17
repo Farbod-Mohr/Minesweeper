@@ -1,4 +1,4 @@
-# FINAL CIS PROJECT — MINRSWEEPER
+# FINAL CIS PROJECT — MINESWEEPER
 
 ## BASIC INFO
 *Creator:* Farbod Mohr
@@ -12,7 +12,6 @@
 - You can choose a preset from a list of provided board sizes and mine counts, or enter your own.
 - All gameplay features from the original game are here: flag placement, cell digging, and mine explosions.
 - Saves your high-scores locally.
-- Has input support for both keyboard *and* mouse.
 
 ---
 
@@ -47,3 +46,5 @@ cmake --build "build"; .\build\Debug\Minesweeper.exe
 ```bash
 cmake --build "build" && ./build/Debug/Minesweeper.exe
 ```
+
+**IMPORTANT NOTE:** THIS PROJECT REQUIRES C++ 17 OR HIGHER TO RUN PROPERLY.

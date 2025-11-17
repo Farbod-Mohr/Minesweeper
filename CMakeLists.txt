@@ -1,8 +1,17 @@
-cmake_minimum_required(VERSION 3.10.0)
-project(Minesweeper VERSION 0.1.0 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.10)
+project(Minesweeper)
 
-add_executable(
-    Minesweeper 
-    main.cpp
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Include directory
+include_directories(include)
+
+# Source files
+set(
+    SOURCES  
+    src/main.cpp
 )
 
+# Create executable  
+add_executable(recipe_manager ${SOURCES})

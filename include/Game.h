@@ -1,0 +1,112 @@
+#include <string>
+using namespace std;
+
+/*
+? Description: The Game class manages the overall state and flow of the program.
+* Its intended use is to create an object of it in `main()` and then call its `init()` function to begin the game loop.
+* It handles getting user input via the InputHandler class and affects the game state accordingly.
+* It has information about the UI screens in the game, along with handling their rendering. The only screen that handles its own rendering is the minesweeper board, which is done via the Board class.
+* It manages the timer for each game, calculating the total time taken when a game ends and displaying it to the player.
+* It calculates the player's score based on time taken and difficulty, sending it to the HighScoreSaver class to be dealt with.
+*/
+
+#ifndef GAME_H
+#define GAME_H
+
+enum Screen
+{
+    MAIN_MENU,            // The screen in which the player can choose to start a new game, see high scores, or exit.
+    DIFFICULTY_SELECTION, // The screen in which the player selects a difficulty for the new game or chooses custom settings.
+    CUSTOM_SETTINGS,      // The screen in which the player can enter their own custom board size and mine count.
+    MINESWEEPER,          // The screen in which the player plays minesweeper.
+    GAME_OVER,            // The screen shown when the player hits a mine. They can return to the main menu from here.
+    WIN,                  // The screen shown when the player successfully clears the board without hitting any mines. They can return to the main menu from here.
+    HIGH_SCORES,          // The screen showing the top 3 high scores. They can return to the main menu from here.
+    EXIT                  // The screen shown when the player chooses to exit the game. It will have display a goodbye message and end the program.
+};
+
+struct Difficulty
+{
+    // FORMAT: {rows, cols, mineCount}
+    int EASY[3] = {7, 7, 8};
+    int MEDIUM[3] = {16, 16, 40};
+    int HARD[3] = {16, 30, 99};
+};
+
+class Game
+{
+private:
+    Screen currentScreen = MAIN_MENU; // The current screen the player is on. Always starts at the main menu.
+    int startTime = 0;                // The time at which the game started. This will be used to figure out how long a game takes.
+    int endTime = 0;                  // The time at which the game ended. This will be used to figure out how long a game takes.
+    int score = 0;                    // The player's score for this game. It will be calculated when a game is won based on time and difficulty.
+
+    // struct holding boolean values for each button in the UI.
+    // These will be set to true when the corresponding button is selected, changing the rendering from white to bright cyan.
+    // They will also be used to determine what action to take when the player pressed the DIG key (Enter/Space/'e').
+    // they will also be used to determine what happens when the player attempts to navigate the UI using the movement keys (wasd/arrow keys).
+    // When the game loads, MM_newGame will be selected by default.
+    struct UIButtons
+    {
+        // Main Menu
+        bool MM_newGame = true; // Selected on program start
+        bool MM_highScores = false;
+        bool MM_exit = false;
+
+        // Difficulty Selection
+        bool DS_easy = false;
+        bool DS_medium = false;
+        bool DS_hard = false;
+        bool DS_custom = false;
+
+        // Custom Settings
+        // No buttons here, just input fields.
+        // When the last input field (mine count) is filled in and all the settings are valid, pressing DIG will start the game.
+
+        // Game Over
+        bool GO_return = false;
+
+        // Win
+        bool W_return = false;
+
+        // High Scores
+        bool HS_return = false;
+
+    } uiButtons;
+
+    // The function to clear the screen is different based on the operating system, so this function handles that.
+    void clear() const {}
+
+    // Starts a new game with the selected difficulty.
+    void startNewGame(Difficulty selected_diff) {}
+
+    // Overload of above. Starts a new game with custom settings.
+    void startNewGame(int rows, int cols, int mineCount) {}
+
+    // Returns (as a formatted string) the total time taken for the current game via the `startTime` and `endTime` variables.
+    // It then sets those variables back to `0` for the next game.
+    // The timer isn't actually displaye during gameplay, due to the unfortunate fact that the methods to get user input are halting functions.
+    // A player's time will only be shown on the WIN screen after they successfully clear the board.
+    string calcTime() {}
+
+    // Calculate the player's score based on time taken and board difficulty and sets the `score` variable.
+    void calcScore() {}
+
+    // ======== Rendering Functions ========= //
+    void renderMainMenu() {}
+    void renderMinesweeper() {}
+    void renderGameOver() {}
+    void renderWin() {}
+    void renderHighScores() {}
+    void renderExit() {}
+
+public:
+    // Starts the main game loop, creating any needed objects and begins the process of rendering and input handling.
+    // The rendering functions seen below will be called from within this function based on the currentScreen value.
+    void init() {}
+
+    // First calculates and then returns the player's `score` for the game in question. It then resets the `score` to `0` for the next game.
+    int getScore() {}
+};
+
+#endif // GAME_H
