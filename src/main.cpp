@@ -9,8 +9,8 @@ int main()
     cout << "Hello World!" << endl;
     // ---------------------------------------------
 
-    Game game;
-    game.init();
+    // Game game;
+    // game.init();
 
     return 0;
 }

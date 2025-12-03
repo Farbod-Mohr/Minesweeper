@@ -1,10 +1,13 @@
 #include <conio.h> // For _getch()
+#include <unordered_map>
+using namespace std;
 
 /*
 ? Description: The InputHandler class is responsible for capturing and returning user input from the keyboard.
 * the `getkey()` function captures a key press, using a different method appropirate to the operating system.
 * It also contains an `Action` enum that maps specific key presses to different game actions such as movement, digging, and so on.
 * Other classes (mainly the Game and Board classes) will use the `getAction()` function to get the player's key press and act accordingly.
+! Note: This is a static class, meaning no objects of it can be made.
 */
 
 #ifndef INPUT_HANDLER_H
@@ -24,14 +27,22 @@ enum Action
 
 class InputHandler
 {
-public:
-    // Records a key press and returns the ASCII value of the pressed key.
-    // Uses different methods based on the OS.
-    int getkey() {}
+private:
 
-    // Gets a key press and maps it to an Action enum. It then returns that Action.
-    // The Board and Game classes will use this to determine what to do.
-    Action getAction() {}
+    // An unordered map that connects key presses to their respective Action enums.
+    static const unordered_map<int, Action> keyMap;
+
+    // The constructor and destructor are private to prevent any objects of this class being made.
+    InputHandler() {};
+    ~InputHandler() {};
+
+    // Captures a key press from the keyboard and returns its integer value.
+    // Uses two different methods depending on the operating system.
+    static int getkey();
+
+public:
+    // Captures a key press and returns the corresponding Action enum.
+    static Action getAction();
 };
 
 #endif // INPUT_HANDLER_H

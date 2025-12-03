@@ -14,4 +14,4 @@ set(
 )
 
 # Create executable  
-add_executable(recipe_manager ${SOURCES})
+add_executable(minesweeper ${SOURCES})

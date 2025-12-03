@@ -1,3 +1,4 @@
+#include <string>
 using namespace std;
 
 /*
@@ -31,13 +32,13 @@ public:
     bool isSelected;        // Whether the cell is currently selected by the player. Affects rendering.
 
     // Constructor
-    Cell(CellState state, int x, int y) {}
+    Cell(CellState state, int x, int y);
 
-    // Renders the cell based on its current state.
-    void print() const {};
+    // Returns the character (with ANSI color codes when needed) that represents the cell's current state for rendering.
+    string print() const;
 
     // ========= Setters ========= //
-    CellState setState(CellState state) { this->state = state; }
+    void setState(CellState state) { this->state = state; }
     void setSelected(bool isSelected) { this->isSelected = isSelected; }
     void setAdjacentMinesCount(int count) { this->adjacentMinesCount = count; }
     void setHasMine(bool hasMine) { this->hasMine = hasMine; }
