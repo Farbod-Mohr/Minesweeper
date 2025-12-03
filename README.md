@@ -2,12 +2,10 @@
 
 ## BASIC INFO
 
-*Creator:* Farbod Mohr
-*Creation Start Date:* 11/3/2025
-*Creation End Date:* **N/A**
-*Description:* A console-based recreation of the classic game of minesweeper in C++.
-
----
+- *Creator:* Farbod Mohr
+- *Creation Start Date:* 11/3/2025
+- *Creation End Date:* **N/A**
+- *Description:* A console-based recreation of the classic game of minesweeper in C++.
 
 ## KEY FEATURES
 
@@ -15,8 +13,6 @@
 - All gameplay features from the original game are here: flag placement, cell digging, and mine explosions.
 - Uses a mine placement algorithm that minimizes the chances of unsolvable boards and 50/50 guesses.
 - Saves your high-scores locally. You can view them by selecting the appropriate option from the main menu.
-
----
 
 ## How To Build
 
@@ -39,8 +35,6 @@ cmake ..
 cmake --build .
 cd ..
 ```
-
----
 
 ## How To Run
 
