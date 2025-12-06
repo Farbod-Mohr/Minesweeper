@@ -19,7 +19,7 @@ enum Action
     LEFT,   // 'a', 'A' or Left Arrow
     DOWN,   // 's', 'S' or Down Arrow
     RIGHT,  // 'd', 'D' or Right Arrow
-    DIG,    // 'e' or Space
+    DIG,    // 'e', Space or Enter
     FLAG,   // 'q'
     QUIT,   // esc key
     UNKNOWN // Any other key

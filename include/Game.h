@@ -21,34 +21,36 @@ enum Screen
     MINESWEEPER,          // The screen in which the player plays minesweeper.
     LOSS,                 // The screen shown when the player hits a mine. They can return to the main menu from here.
     WIN,                  // The screen shown when the player successfully clears the board without hitting any mines. They can return to the main menu from here.
-    HIGH_SCORES,          // The screen showing the top 3 high scores. They can return to the main menu from here.
+    HIGH_SCORES,          // The screen showing the player's 5 highest scores for each mode. They can return to the main menu from here.
     EXIT                  // The screen shown when the player chooses to exit the game. It will have display a goodbye message and end the program.
 };
 
 // Represents the information about a difficulty level.
 struct DiffInfo
 {
-    const string name;   // The name of the difficulty (Easy/Medium/Hard). This is mainly for display purposes.
-    const int row;       // The row count of the board (excluding walls).
-    const int column;    // The column count of the board (excluding walls).
-    const int mineCount; // The number of mines on the board.
+    string name;   // The name of the difficulty (Easy/Medium/Hard). This is mainly for display purposes.
+    int row;       // The row count of the board (excluding walls).
+    int column;    // The column count of the board (excluding walls).
+    int mineCount; // The number of mines on the board.
+
+    // Constructor
+    DiffInfo(string n, int r, int c, int m) : name(n), row(r), column(c), mineCount(m) {}
 };
 
 // An unordered map that connects difficulty names to their respective DiffInfo structs.
 const unordered_map<string, DiffInfo> Difficulty = {
     {"Easy", {"EASY", 7, 7, 8}},
     {"Med", {"MEDIUM", 16, 16, 40}},
-    {"Hard", {"HARD", 16, 30, 99}}
-};
+    {"Hard", {"HARD", 16, 30, 99}}};
 
 class Game
 {
 private:
     Screen currentScreen = MAIN_MENU; // The current screen the player is on. Always starts at the main menu.
-    int startTime;                    // The time at which the game started. This will be used to figure out how long a game takes.
-    int endTime;                      // The time at which the game ended. This will be used to figure out how long a game takes.
+    int startTime = 0;                // The time at which the game started. This will be used to figure out how long a game takes.
+    int endTime = 0;                  // The time at which the game ended. This will be used to figure out how long a game takes.
 
-    DiffInfo currentDiff; // The difficulty selected for the current game. Used to create the board and calculate score.
+    DiffInfo currentDiff = Difficulty.at("Easy"); // The difficulty selected for the current game. Used to create the board and calculate score.
 
     // struct holding boolean values for each button in the UI.
     // These will be set to true when the corresponding button is selected, changing the rendering from white to bright cyan.
@@ -95,6 +97,9 @@ private:
     // A 'score' is just the time taken to beat a given difficulty. The 5 best times for each difficulty are kept as high scores.
     void saveScore(string total_time);
 
+    // A helper function that returns a formatted string representing the given DiffInfo struct. Useful for rendering difficulty information in the UI.
+    string printDiff(const DiffInfo& diff) const;
+
     // ======== Rendering Functions ========= //
     void renderMainMenu();
     void renderDiffSelection();
@@ -108,9 +113,6 @@ public:
     // Starts the main game loop, creating any needed objects and begins the process of rendering and input handling.
     // The rendering functions seen below will be called from within this function based on the currentScreen value.
     void init();
-
-    // First calculates and then returns the player's `score` for the game in question. It then resets the `score` to `0` for the next game.
-    int getScore();
 };
 
 #endif // GAME_H

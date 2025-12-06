@@ -23,7 +23,7 @@
 - `InputHandler::getkey()`
 - `InputHandler::getAction()`
 
-## [] Feature 1: Main Menu Navigation  
+## [x] ~~Feature 1: Main Menu Navigation~~ COMPLETED
 
 **Trigger**: User starts the program.
 
@@ -127,7 +127,7 @@
 
 **Trigger**: User is in a game and wants to interact with the board.
 
-**Input Needed**: User key input (W, A, S, D, or the Arrow Keys for movement; Q for flagging; E or Space for digging).
+**Input Needed**: User key input (W, A, S, D, or the Arrow Keys for movement; Q for flagging; E, Space or Enter for digging).
 
 **Implementation Flow**:
 
