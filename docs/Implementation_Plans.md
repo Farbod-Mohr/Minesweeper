@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Feature 0: Input Handling System
+## [x] ~~Feature 0: Input Handling System~~ COMPLETED
 
 **Trigger**: User presses a key on the keyboard.
 
@@ -23,7 +23,7 @@
 - `InputHandler::getkey()`
 - `InputHandler::getAction()`
 
-## Feature 1: Main Menu Navigation  
+## [] Feature 1: Main Menu Navigation  
 
 **Trigger**: User starts the program.
 
@@ -58,7 +58,7 @@
 - `Game::init()`
 - `InputHandler::getAction()`
 
-## Feature 2: New Game Start
+## [] Feature 2: New Game Start
 
 **Trigger**: User selects "Start New Game" from the main menu.
 
@@ -93,7 +93,7 @@
 - `InputHandler::getAction()`
 - `Game::clear()`
 
-## Feature 3: Cell/Board Rendering
+## [] Feature 3: Cell/Board Rendering
 
 **Trigger**: A new game is started or the user interacts with the board.
 
@@ -123,11 +123,11 @@
 - `Board::render()`
 - `Board::clear()`
 
-## Feature 4: User Interaction with Cells
+## [] Feature 4: User Interaction with Cells
 
 **Trigger**: User is in a game and wants to interact with the board.
 
-**Input Needed**: User key input (W, A, S, D, or the Arrow Keys for movement; F for flagging; E, Space, or Enter for digging).
+**Input Needed**: User key input (W, A, S, D, or the Arrow Keys for movement; Q for flagging; E or Space for digging).
 
 **Implementation Flow**:
 
@@ -135,8 +135,8 @@
 2. Inside the loop, use `InputHandler::getAction()` to capture user input and determine the desired action.
 3. Based on the action returned, update the board state accordingly:
     - Movement (W, A, S, D, or the Arrow Keys): Use the `Board::selectCell(int r, int c)`, `Board::unselectCell(int r, int c)`, and the `selctedCell` pointer in the Board class to move the selection around the board according to the input. Must make sure that the selection does not move into WALL cells. The cell that has been selected should have its color changed to cyan when rendered. When a new cell is selected, the previously selected cell should be unselected. Selecting a cell involves updating the `selectedCell` pointer inside the Board class to point to the new cell and the `isSelected` property of the Cell object itself to `true`. It must then and unselect the previous cell, setting its selected state to false.
-    - Digging (E, Space or Enter): Call the `digCell(int x, int y)` funtion with the coordinates of the currently selected cell. If the dug cell is a mine, set its state to exploded and end the game. If it's safe, reveal it. If it has 0 adjacent mines, recursively dig all adjacent cells, calling the `digCell(int x, int y)` with the coordinates of a 3x3 grid around the cell we just dug. Update the `dugCells` property in the Board class accordingly. After each dig, the game should check if the player has won via the `Board::hasWon()` function, which checks if the number of dug cells equals the total number of safe cells.
-    - Flagging (F): Toggle the flagged state of the currently selected cell using a `toggleFlagCell(int x, int y)` function. Flagged cells cannot be dug. Update the `flagCount` and `minesRemaining` properties in the Board class accordingly
+    - Digging (E, Space): Call the `digCell(int x, int y)` funtion with the coordinates of the currently selected cell. If the dug cell is a mine, set its state to exploded and end the game. If it's safe, reveal it. If it has 0 adjacent mines, recursively dig all adjacent cells, calling the `digCell(int x, int y)` with the coordinates of a 3x3 grid around the cell we just dug. Update the `dugCells` property in the Board class accordingly. After each dig, the game should check if the player has won via the `Board::hasWon()` function, which checks if the number of dug cells equals the total number of safe cells.
+    - Flagging (Q): Toggle the flagged state of the currently selected cell using a `toggleFlagCell(int x, int y)` function. Flagged cells cannot be dug. Update the `flagCount` and `minesRemaining` properties in the Board class accordingly
 4. After handling the input, call the `Board::render()` function to update the board's display.
 
 **Data Modified**:
@@ -159,7 +159,7 @@
 - `Board::render()`
 - `Board::hasWon()`
 
-## Feature 5: Algorythmic Mine Placement
+## [] Feature 5: Algorythmic Mine Placement
 
 **Trigger**: User digs their first cell in a new game.
 
@@ -187,7 +187,7 @@
 
 - `Board::placeMines(int safeX, int safeY)`
 
-## Feature 6: Game Timer
+## [] Feature 6: Game Timer
 
 **Trigger**: User starts a new game.
 
@@ -202,7 +202,7 @@
 5. The time taken will be displayed on the WIN screen after the player successfully clears the board.
 6. After the time is calculated and displayed, it along with the difficulty selected (`currentDiff`) will be sent to the HighScoreSaver class to be recorded as a high score if applicable.
 
-## Feature 7: High Score Tracking
+## [] Feature 7: High Score Tracking
 
 **Trigger**: User wins a game.
 

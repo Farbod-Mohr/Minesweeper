@@ -1,4 +1,4 @@
-#include <conio.h> // For _getch()
+#include <conio.h>
 #include <unordered_map>
 using namespace std;
 
@@ -15,13 +15,13 @@ using namespace std;
 
 enum Action
 {
-    UP,     // 'w' or Up Arrow
-    LEFT,   // 'a' or Left Arrow
-    DOWN,   // 's' or Down Arrow
-    RIGHT,  // 'd' or Right Arrow
-    DIG,    // 'e', Space, or Enter
-    FLAG,   // 'f'
-    QUIT,   // 'q'
+    UP,     // 'w', 'W' or Up Arrow
+    LEFT,   // 'a', 'A' or Left Arrow
+    DOWN,   // 's', 'S' or Down Arrow
+    RIGHT,  // 'd', 'D' or Right Arrow
+    DIG,    // 'e' or Space
+    FLAG,   // 'q'
+    QUIT,   // esc key
     UNKNOWN // Any other key
 };
 

@@ -11,6 +11,7 @@ include_directories(include)
 set(
     SOURCES  
     src/main.cpp
+    src/InputHandler.cpp
 )
 
 # Create executable  

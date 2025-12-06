@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/Game.h"
+#include "../include/InputHandler.h"
 using namespace std;
 
 int main()
@@ -9,8 +9,31 @@ int main()
     cout << "Hello World!" << endl;
     // ---------------------------------------------
 
-    // Game game;
-    // game.init();
+    while (true)
+    {
+        Action action = InputHandler::getAction();
+        if (action == UP)
+            cout << "UP" << endl;
+        else if (action == DOWN)
+            cout << "DOWN" << endl;
+        else if (action == LEFT)
+            cout << "LEFT" << endl;
+        else if (action == RIGHT)
+            cout << "RIGHT" << endl;
+        else if (action == DIG)
+            cout << "DIG" << endl;
+        else if (action == FLAG)
+            cout << "FLAG" << endl;
+        else if (action == QUIT)
+        {
+            cout << "QUIT" << endl;
+            break;
+        }
+        else
+        {
+            cout << "UNKNOWN KEY" << endl;
+        }
+    }
 
     return 0;
 }
