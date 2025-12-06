@@ -12,6 +12,8 @@ set(
     SOURCES  
     src/main.cpp
     src/Game.cpp
+    src/Board.cpp
+    src/Cell.cpp
     src/InputHandler.cpp
 )
 

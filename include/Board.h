@@ -59,6 +59,9 @@ private:
     // Checks if the player has won the game by checking if the number of dug cells (`dugCount`) equals the total number of safe cells `totalCells - mineCount`.
     bool hasWon() const;
 
+    // A helper function that initializes a the gmae grid with WALL cells on the borders and NORMAL cells inside.
+    void initializeGrid(int rows, int cols);
+
 public:
     // Constructor
     Board(int rows, int cols, int mineCount);

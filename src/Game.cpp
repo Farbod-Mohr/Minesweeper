@@ -1,45 +1,12 @@
-/*
-## [] Feature 1: Main Menu Navigation
-
-**Trigger**: User starts the program.
-
-**Input Needed**: User key input (W, S, Up Arrow, Down Arrow, Enter).
-
-**Implementation Flow**:
-
-1. On program start, display main menu options: Start Game, High Scores, and Exit.
-2. Get user movement inputs for menu navigation. They can move with W, S, Up Arrow, and Down Arrow keys.
-3. In the Game class, use InputHandler to capture user input and set the appropiate elements in the `UIButtons` struct to true.
-4. Every time the user gives an input, a game tick passes. Every game tick, first the console is cleared via `Game::clear()`. After that, in the `renderMainMenu()` function, check which button with the `MM_` identifier in the `UIButtons` struct is true and highlight the corresponding menu option.
-5. When the user presses Enter, check which menu option is currently set to true in the `UIButtons` struct and navigate to the corresponding screen. (for now it should just print a message to the console).
-6. Reset all `UIButtons` struct values with the `MM_` identifier to false after handling the input. (except for MM_newGame which is true by default)
-7. These same principals and program flow apply for all the other UI screens in the game, so they will no longer be mentioned in the following features list. Just know that all UI screens will use the `UIButtons` struct to track the user's current selection and render accordingly.
-
-**Data Modified**:
-
-- `UIButtons` struct in the Game class to track which menu option is selected.
-
-**Completion**:
-
-- Brings the user to the appropriate screen based on their selection.
-
-**Functions Used**:
-
-- `Game::renderMainMenu()`
-- `Game::renderGameOver()` (in the future)
-- `Game::renderWin()` (in the future)
-- `Game::renderHighScores()` (in the future)
-- `Game::renderExit()` (in the future)
-- `Game::clear()`
-- `Game::init()`
-- `InputHandler::getAction()`
-*/
-
-#include "Game.h"
-#include "InputHandler.h"
+#define _CRT_SECURE_NO_WARNINGS
+#include "../include/Game.h"
+#include "../include/InputHandler.h"
+#include "../include/Color.h"
+#include "../include/Board.h"
+#include <ctime>
+#include <chrono>
 #include <iostream>
 #include <cstdlib> // For system("clear") and system("cls")
-#include "Color.h"
 using namespace std;
 
 void Game::init()
@@ -93,7 +60,7 @@ void Game::clear() const
 #endif
 }
 
-void Game::renderExit()
+void const Game::renderExit()
 {
     cout << "Thank you for playing! See you next time! :> " << endl;
 }
@@ -179,9 +146,9 @@ void Game::renderMainMenu()
     }
 }
 
-// ? =========================================================== //
-// ! Placeholder implementations for other rendering functions ! //
-// ? =========================================================== //
+// ? ======================================================== ? //
+// ! Placeholder implementations for some rendering functions ! //
+// ? ======================================================== ? //
 
 void Game::renderDiffSelection()
 {
@@ -235,7 +202,20 @@ void Game::renderDiffSelection()
             uiButtons.DS_easy = true;
             uiButtons.DS_medium = false;
             uiButtons.DS_hard = false;
-            
+
+            if (uiButtons.DS_easy)
+            {
+                currentDiff = Difficulty.at("Easy");
+            }
+            else if (uiButtons.DS_medium)
+            {
+                currentDiff = Difficulty.at("Med");
+            }
+            else if (uiButtons.DS_hard)
+            {
+                currentDiff = Difficulty.at("Hard");
+            }
+
             currentScreen = MINESWEEPER;
             return;
 
@@ -243,6 +223,17 @@ void Game::renderDiffSelection()
             break;
         }
     }
+}
+
+Board Game::startNewGame(DiffInfo selected_diff)
+{
+    // Initialize a new Board object with the selected difficulty's info.
+    Board newBoard(selected_diff.row, selected_diff.column, selected_diff.mineCount);
+
+    auto now = chrono::system_clock::now();
+    startTime = chrono::system_clock::to_time_t(now);
+
+    return newBoard;
 }
 
 void Game::renderMinesweeper()
@@ -254,13 +245,22 @@ void Game::renderMinesweeper()
         cout << endl;
         cout << "Minesweeper Screen (Not Yet Implemented)" << endl;
 
-        Action act = InputHandler::getAction();
-        if (act == DIG) 
+        Board newBoard = startNewGame(currentDiff);
+
+        bool won = newBoard.run(); // Does nothing for now; always returns true.
+
+        if (!won)
         {
+            currentScreen = LOSS;
+            return;
+        }
+        else
+        {
+            auto now = chrono::system_clock::now();
+            endTime = chrono::system_clock::to_time_t(now);
             currentScreen = WIN;
             return;
         }
-            
     }
 }
 
@@ -289,7 +289,12 @@ void Game::renderWin()
         Game::clear();
         cout << Color::Bold << Color::BrightGreen << "=====|||  YOU WIN!  |||=====" << Color::Reset << endl;
         cout << endl;
-        cout << "Win Screen (Not Yet Implemented)" << endl;
+
+        cout << "Congrats! You won on " << currentDiff.name << " mode!" << endl;
+
+        // The function to calculate the time taken will be implemented later. This is just a test for now.
+        cout << "Your start time was: " << ctime(&startTime);
+        cout << "Your end time was: " << ctime(&endTime);
 
         Action act = InputHandler::getAction();
         if (act == DIG)

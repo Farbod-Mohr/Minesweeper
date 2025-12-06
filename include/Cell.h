@@ -27,8 +27,8 @@ public:
     CellState state;        // Current state of the cell according to the enum above.
     bool hasMine;           // Whether or not the cell contains a mine.
     int adjacentMinesCount; // Number of mines in the 8 surrounding cells. Will be calculated after mine placement within the Board class.
-    const int x = 0;        // The Cell's x-coordinate in the grid.
-    const int y = 0;        // The Cell's y-coordinate in the grid.
+    int x;                  // The Cell's x-coordinate in the grid.
+    int y;                  // The Cell's y-coordinate in the grid.
     bool isSelected;        // Whether the cell is currently selected by the player. Affects rendering.
 
     // Constructor
@@ -38,12 +38,12 @@ public:
     string print() const;
 
     // ========= Setters ========= //
+    void setX(int x) { this->x = x; }
+    void setY(int y) { this->y = y; }
+    void setHasMine(bool hasMine) { this->hasMine = hasMine; }
     void setState(CellState state) { this->state = state; }
     void setSelected(bool isSelected) { this->isSelected = isSelected; }
     void setAdjacentMinesCount(int count) { this->adjacentMinesCount = count; }
-    void setHasMine(bool hasMine) { this->hasMine = hasMine; }
-
-    // Setters for others are not included as they are decided on Cell creation.
 };
 
 #endif // CELL_H

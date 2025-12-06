@@ -1,5 +1,6 @@
 #include <string>
 #include <unordered_map>
+#include "../include/Board.h"
 using namespace std;
 
 /*
@@ -47,10 +48,10 @@ class Game
 {
 private:
     Screen currentScreen = MAIN_MENU; // The current screen the player is on. Always starts at the main menu.
-    int startTime = 0;                // The time at which the game started. This will be used to figure out how long a game takes.
-    int endTime = 0;                  // The time at which the game ended. This will be used to figure out how long a game takes.
+    time_t startTime = 0;             // The time at which the game started. This will be used to figure out how long a game takes.
+    time_t endTime = 0;               // The time at which the game ended. This will be used to figure out how long a game takes.
 
-    DiffInfo currentDiff = Difficulty.at("Easy"); // The difficulty selected for the current game. Used to create the board and calculate score.
+    DiffInfo currentDiff = DiffInfo{"Nil", 0, 0, 0}; // The difficulty selected for the current game. Used to create the board and calculate score.
 
     // struct holding boolean values for each button in the UI.
     // These will be set to true when the corresponding button is selected, changing the rendering from white to bright cyan.
@@ -84,7 +85,9 @@ private:
     void clear() const;
 
     // Starts a new game with the selected difficulty.
-    void startNewGame(DiffInfo selected_diff);
+    // It creates a new Board object with the appropriate parameters and resets the timer.
+    // It then returns the created Board object.
+    Board startNewGame(DiffInfo selected_diff);
 
     // Returns a formatted string of the total time taken for the current game via the `startTime` and `endTime` variables.
     // The timer isn't actually displayed during gameplay, due to the unfortunate fact that the methods to get user input are halting functions.
@@ -98,7 +101,7 @@ private:
     void saveScore(string total_time);
 
     // A helper function that returns a formatted string representing the given DiffInfo struct. Useful for rendering difficulty information in the UI.
-    string printDiff(const DiffInfo& diff) const;
+    string printDiff(const DiffInfo &diff) const;
 
     // ======== Rendering Functions ========= //
     void renderMainMenu();
@@ -107,11 +110,11 @@ private:
     void renderGameOver();
     void renderWin();
     void renderHighScores();
-    void renderExit();
+    void const renderExit();
 
 public:
     // Starts the main game loop, creating any needed objects and begins the process of rendering and input handling.
-    // The rendering functions seen below will be called from within this function based on the currentScreen value.
+    // Rendering functions will be called from within this function based on the currentScreen value.
     void init();
 };
 

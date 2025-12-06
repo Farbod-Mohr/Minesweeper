@@ -34,6 +34,7 @@ namespace Color
     inline constexpr string_view Magenta = "\033[35m";
     inline constexpr string_view Cyan = "\033[36m";
     inline constexpr string_view White = "\033[37m";
+    inline constexpr string_view Gray = "\033[90m";
 
     // Bright/Bold colors
     inline constexpr string_view BrightBlack = "\033[90m";

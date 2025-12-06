@@ -1,4 +1,4 @@
-#include "InputHandler.h"
+#include "../include/InputHandler.h"
 
 // Mapping key presses to Action enums.
 const unordered_map<int, Action> InputHandler::keyMap = {

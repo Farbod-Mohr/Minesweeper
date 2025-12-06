@@ -58,7 +58,7 @@
 - `Game::init()`
 - `InputHandler::getAction()`
 
-## [] Feature 2: New Game Start
+## [x] ~~Feature 2: New Game Start~~ COMPLETED
 
 **Trigger**: User selects "Start New Game" from the main menu.
 
@@ -71,7 +71,7 @@
 3. Use the principals mentioned in Feature 1 to navigate the UI.
 4. When the user selects one of these options, get the respective preset `DiffInfo` object from the `Difficulty` hash map in the game class. Use this info to initialize a `Board` object with the appropriate rows, columns, and mine count via `Game::startNewGame(DiffInfo selected_diff)`. The `currentDiff` variable in the Game class should also be set to the selected difficulty's `DiffInfo` object for later use in score calculation.
 5. After the board is initialized, the `startTime` variable in the Game class should be set to the current OS time to start tracking how long the game takes.
-6. Lastly, the `Board::run()` will be called function to begin the game loop.
+6. Lastly, the `Board::run()` will be called to begin the game loop.
 
 ***IMPORTANT NOTE***: MINE PLACEMENT LOGIC IS NOT PART OF THIS FEATURE, AS THEY WILL HAVE TO BE PLACED WHEN THE PLAYER DIGS THEIR FIRST CELL. THIS IS TO ENSURE THE PLAYER DOES NOT DIG A MINE ON THEIR FIRST MOVE.
 
