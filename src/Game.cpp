@@ -231,6 +231,11 @@ void Game::renderDiffSelection()
             break;
 
         case DIG: // ! TEMP
+
+            uiButtons.DS_easy = true;
+            uiButtons.DS_medium = false;
+            uiButtons.DS_hard = false;
+            
             currentScreen = MINESWEEPER;
             return;
 

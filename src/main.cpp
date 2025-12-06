@@ -21,7 +21,7 @@ void HideCursor()
     CONSOLE_CURSOR_INFO info;
     info.dwSize = 100;
     info.bVisible = FALSE;
-    SetConsoleCursorInfo(consoleHandle, &info);
+SetConsoleCursorInfo(consoleHandle, &info);
 #else
     std::cout << "\033[?25l";
 #endif
@@ -31,8 +31,6 @@ void HideCursor()
 int main()
 {
     HideCursor();
-
-    cout << Color::BgBlack;
 
     Game game;
     game.init();
