@@ -23,7 +23,7 @@ cout << Color::Red << "This text is red!" << Color::Reset << endl;
 namespace Color
 {
     // Reset
-    inline constexpr string_view Reset = "\033[0m";
+    inline constexpr string_view Reset = "\033[0m\033[?25l"; // Also re-hides the cursor
 
     // Regular colors
     inline constexpr string_view Black = "\033[30m";

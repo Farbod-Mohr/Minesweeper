@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNI
 #include "../include/Game.h"
 #include "../include/InputHandler.h"
 #include "../include/Color.h"
@@ -62,7 +62,7 @@ void Game::clear() const
 
 void const Game::renderExit()
 {
-    cout << "Thank you for playing! See you next time! :> " << endl;
+    cout << endl << Color::Bold << "Thank you for playing! See you next time! :> " << endl;
 }
 
 string Game::printDiff(const DiffInfo &diff) const
@@ -79,11 +79,25 @@ void Game::renderMainMenu()
         cout << Color::Bold << Color::BrightGreen << "=====|||  MAIN MENU  |||=====" << Color::Reset << endl;
         cout << endl;
 
-        // Single line if-else statements are used to determine which menu option is currently selected.
-        // I remember using these in javascript a while ago and turns out they work here too!
-        cout << (uiButtons.MM_newGame ? Color::Cyan : "") << (uiButtons.MM_newGame ? "> " : "  ") << (uiButtons.MM_newGame ? Color::Underline : "") << "Start New Game" << Color::Reset << endl;
-        cout << (uiButtons.MM_highScores ? Color::Cyan : "") << (uiButtons.MM_highScores ? "> " : "  ") << (uiButtons.MM_highScores ? Color::Underline : "") << "High Scores" << Color::Reset << endl;
-        cout << (uiButtons.MM_exit ? Color::Cyan : "") << (uiButtons.MM_exit ? "> " : "  ") << (uiButtons.MM_exit ? Color::Underline : "") << "Exit" << Color::Reset << endl;
+        // If-else statements are used to determine which button is currently selected and render it accordingly.
+
+        if (uiButtons.MM_newGame) {
+            cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "Start New Game" << Color::Reset << endl;
+        } else {
+            cout << "   Start New Game" << endl;
+        }
+
+        if (uiButtons.MM_highScores) {
+            cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "High Scores" << Color::Reset << endl;
+        } else {
+            cout << "   High Scores" << endl;
+        }
+
+        if (uiButtons.MM_exit) {
+            cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "Exit" << Color::Reset << endl;
+        } else {
+            cout << "   Exit" << endl;
+        }
 
         // Get user input for menu navigation
         Action act = InputHandler::getAction();
@@ -127,18 +141,18 @@ void Game::renderMainMenu()
             else if (uiButtons.MM_highScores)
             {
                 currentScreen = HIGH_SCORES;
-                uiButtons.MM_newGame = true;
-                uiButtons.MM_highScores = false;
                 return;
             }
             else if (uiButtons.MM_exit)
             {
                 currentScreen = EXIT;
-                uiButtons.MM_newGame = true;
-                uiButtons.MM_exit = false;
                 return;
             }
             break;
+
+        case QUIT:
+            currentScreen = EXIT;
+            return;
 
         default:
             break;
@@ -161,11 +175,23 @@ void Game::renderDiffSelection()
 
         // Yes I know this looks genuinely horrid, awful, and mortifyingly unreadable, but that's the price I'm willing to pay for a good looking UI :D
 
-        cout << (uiButtons.DS_easy ? Color::Bold : "") << (uiButtons.DS_easy ? Color::BrightGreen : Color::Green) << (uiButtons.DS_easy ? "> " : "  ") << (uiButtons.DS_easy ? Color::Underline : "") << "Easy" << Color::Reset << (uiButtons.DS_easy ? printDiff(Difficulty.at("Easy")) : "") << endl;
+        if (uiButtons.DS_easy) {
+            cout << Color::Bold << Color::BrightGreen << "  > " << Color::Underline << "Easy" << Color::Reset << printDiff(Difficulty.at("Easy")) << endl;
+        } else {
+            cout << Color::Green << "   Easy" << Color::Reset << endl;
+        }
 
-        cout << (uiButtons.DS_medium ? Color::Bold : "") << (uiButtons.DS_medium ? Color::BrightYellow : Color::Yellow) << (uiButtons.DS_medium ? "> " : "  ") << (uiButtons.DS_medium ? Color::Underline : "") << "Medium" << Color::Reset << (uiButtons.DS_medium ? printDiff(Difficulty.at("Med")) : "") << endl;
+        if (uiButtons.DS_medium) {
+            cout << Color::Bold << Color::BrightYellow << "  > " << Color::Underline << "Medium" << Color::Reset << printDiff(Difficulty.at("Med")) << endl;
+        } else {
+            cout << Color::Yellow << "   Medium" << Color::Reset << endl;
+        }
 
-        cout << (uiButtons.DS_hard ? Color::Bold : "") << (uiButtons.DS_hard ? Color::BrightRed : Color::Red) << (uiButtons.DS_hard ? "> " : "  ") << (uiButtons.DS_hard ? Color::Underline : "") << "Hard" << Color::Reset << (uiButtons.DS_hard ? printDiff(Difficulty.at("Hard")) : "") << endl;
+        if (uiButtons.DS_hard) {
+            cout << Color::Bold << Color::BrightRed << "  > " << Color::Underline << "Hard" << Color::Reset << printDiff(Difficulty.at("Hard")) << endl;
+        } else {
+            cout << Color::Red << "   Hard" << Color::Reset << endl;
+        }
 
         Action act = InputHandler::getAction();
 
@@ -197,26 +223,42 @@ void Game::renderDiffSelection()
             }
             break;
 
-        case DIG: // ! TEMP
+        case DIG:
+        {
+            string selectedDiff;
 
+            if (uiButtons.DS_easy)
+            {
+                selectedDiff = "Easy";
+            }
+            else if (uiButtons.DS_hard)
+            {
+                selectedDiff = "Hard";
+            }
+            else if (uiButtons.DS_medium)
+            {
+                selectedDiff = "Med";
+            }
+
+            currentDiff = Difficulty.at(selectedDiff);
+
+            // Reset the selector so it always opens highlighting Easy next time.
             uiButtons.DS_easy = true;
             uiButtons.DS_medium = false;
             uiButtons.DS_hard = false;
 
-            if (uiButtons.DS_easy)
-            {
-                currentDiff = Difficulty.at("Easy");
-            }
-            else if (uiButtons.DS_medium)
-            {
-                currentDiff = Difficulty.at("Med");
-            }
-            else if (uiButtons.DS_hard)
-            {
-                currentDiff = Difficulty.at("Hard");
-            }
-
             currentScreen = MINESWEEPER;
+            return;
+        }
+        case QUIT:
+
+            currentScreen = MAIN_MENU;
+
+            // Reset the selector so it always opens highlighting Easy next time.
+            uiButtons.DS_easy = true;
+            uiButtons.DS_medium = false;
+            uiButtons.DS_hard = false;
+
             return;
 
         default:
@@ -225,7 +267,7 @@ void Game::renderDiffSelection()
     }
 }
 
-Board Game::startNewGame(DiffInfo selected_diff)
+Board Game::makeNewGame(DiffInfo selected_diff)
 {
     // Initialize a new Board object with the selected difficulty's info.
     Board newBoard(selected_diff.row, selected_diff.column, selected_diff.mineCount);
@@ -241,24 +283,21 @@ void Game::renderMinesweeper()
     while (true)
     {
         Game::clear();
-        cout << Color::Bold << Color::BrightGreen << "=====|||  MINESWEEPER  |||=====" << Color::Reset << endl;
-        cout << endl;
-        cout << "Minesweeper Screen (Not Yet Implemented)" << endl;
 
-        Board newBoard = startNewGame(currentDiff);
+        Board newBoard = makeNewGame(currentDiff);
 
-        bool won = newBoard.run(); // Does nothing for now; always returns true.
+        bool won = newBoard.run(currentDiff.name, currentDiff.diffColor);
 
-        if (!won)
-        {
-            currentScreen = LOSS;
-            return;
-        }
-        else
+        if (won)
         {
             auto now = chrono::system_clock::now();
             endTime = chrono::system_clock::to_time_t(now);
             currentScreen = WIN;
+            return;
+        }
+        else
+        {
+            currentScreen = LOSS;
             return;
         }
     }
@@ -279,6 +318,11 @@ void Game::renderGameOver()
             currentScreen = MAIN_MENU;
             return;
         }
+        else if (act == QUIT)
+        {
+            currentScreen = EXIT;
+            return;
+        }
     }
 }
 
@@ -293,13 +337,18 @@ void Game::renderWin()
         cout << "Congrats! You won on " << currentDiff.name << " mode!" << endl;
 
         // The function to calculate the time taken will be implemented later. This is just a test for now.
-        cout << "Your start time was: " << ctime(&startTime);
-        cout << "Your end time was: " << ctime(&endTime);
+        // cout << "Your start time was: " << ctime(&startTime);
+        // cout << "Your end time was: " << ctime(&endTime);
 
         Action act = InputHandler::getAction();
         if (act == DIG)
         {
             currentScreen = MAIN_MENU;
+            return;
+        }
+        else if (act == QUIT)
+        {
+            currentScreen = EXIT;
             return;
         }
     }
@@ -318,6 +367,11 @@ void Game::renderHighScores()
         if (act == DIG)
         {
             currentScreen = MAIN_MENU;
+            return;
+        }
+        else if (act == QUIT)
+        {
+            currentScreen = EXIT;
             return;
         }
     }

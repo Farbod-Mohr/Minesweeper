@@ -93,7 +93,7 @@
 - `InputHandler::getAction()`
 - `Game::clear()`
 
-## [] Feature 3: Cell/Board Rendering
+## [x] ~~Feature 3: Cell/Board Rendering~~ COMPLETED
 
 **Trigger**: A new game is started or the user interacts with the board.
 
@@ -123,7 +123,7 @@
 - `Board::render()`
 - `Board::clear()`
 
-## [] Feature 4: User Interaction with Cells
+## [x] ~~Feature 4: User Interaction with Cells~~ COMPLETED
 
 **Trigger**: User is in a game and wants to interact with the board.
 

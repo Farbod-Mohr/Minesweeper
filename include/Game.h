@@ -1,5 +1,6 @@
 #include <string>
 #include <unordered_map>
+#include "../include/Color.h"
 #include "../include/Board.h"
 using namespace std;
 
@@ -29,13 +30,32 @@ enum Screen
 // Represents the information about a difficulty level.
 struct DiffInfo
 {
-    string name;   // The name of the difficulty (Easy/Medium/Hard). This is mainly for display purposes.
-    int row;       // The row count of the board (excluding walls).
-    int column;    // The column count of the board (excluding walls).
-    int mineCount; // The number of mines on the board.
+    string name;           // The name of the difficulty (Easy/Medium/Hard). This is mainly for display purposes.
+    int row;               // The row count of the board (excluding walls).
+    int column;            // The column count of the board (excluding walls).
+    int mineCount;         // The number of mines on the board.
+    string_view diffColor; // The color associated with the difficulty for rendering purposes. Green for Easy, Yellow for Medium, Red for Hard.
 
     // Constructor
-    DiffInfo(string n, int r, int c, int m) : name(n), row(r), column(c), mineCount(m) {}
+    DiffInfo(string name, int row, int column, int mineCount) : name(name), row(row), column(column), mineCount(mineCount)
+    {
+        if (name == "EASY")
+        {
+            diffColor = Color::BrightGreen;
+        }
+        else if (name == "MEDIUM")
+        {
+            diffColor = Color::BrightYellow;
+        }
+        else if (name == "HARD")
+        {
+            diffColor = Color::BrightRed;
+        }
+        else // To handle the default "Nil" difficulty.
+        {
+            diffColor = Color::White;
+        }
+    }
 };
 
 // An unordered map that connects difficulty names to their respective DiffInfo structs.
@@ -84,15 +104,15 @@ private:
     // The function to clear the screen is different based on the operating system, so this function handles that.
     void clear() const;
 
-    // Starts a new game with the selected difficulty.
+    // Makes the Board for a new game with the selected difficulty.
     // It creates a new Board object with the appropriate parameters and resets the timer.
-    // It then returns the created Board object.
-    Board startNewGame(DiffInfo selected_diff);
+    // It then returns the created Board object to be run.
+    Board makeNewGame(DiffInfo selected_diff);
 
     // Returns a formatted string of the total time taken for the current game via the `startTime` and `endTime` variables.
     // The timer isn't actually displayed during gameplay, due to the unfortunate fact that the methods to get user input are halting functions.
     // A player's time will only be shown on the WIN screen after they successfully clear the board.
-    // Yes, this means that the user can TECHNICALLY cheat by changing their system clock to have a negative time taken, but they would never do that, right? >->
+    // Yes, this means that the user can TECHNICALLY cheat by changing their system clock to have a negative time taken, but they would never do that... right? >->
     string calcTime();
 
     // Sends both the time taken to beat the game (as decided by the `calcTime()` function) and the `currentDiff` variable to the HighScoreSaver class to be saved.

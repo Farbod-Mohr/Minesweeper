@@ -20,18 +20,20 @@ private:
     // The board size will be (rows+2) x (cols+2) to make room for the WALL cells.
     vector<vector<Cell>> grid;
 
-    int rows;           // Actual playable rows (excluding walls).
-    int cols;           // Actual playable columns (excluding walls).
-    int totalCells;     // Total playable cells (excluding walls).
+    int rows;           // All rows (including walls).
+    int cols;           // All columns (including walls).
+    int totalCells;     // All actually playable cells (excluding walls).
     int mineCount;      // The amount of mines placed on the board.
     int dugCount;       // Tracks the number of cells that have been dug by the player.
     int flagCount;      // Tracks the number of cells that have been flagged by the player.
     int minesRemaining; // `mineCount` - `flagCount`.
 
+    bool minesPlaced = false; // Whether or not the mines have been placed yet. Used to make sure mines are only place once.
+
     Cell *selectedCell; // Pointer to the currently selected cell.
 
     // Returns a reference to the Cell object at the specified row and column.
-    Cell &getCell(int r, int c) const;
+    Cell &getCell(int r, int c);
 
     // Places mines randomly on the board, ensuring the cell at (safeX, safeY) is not a mine.
     // It runs multiple checks to make sure that the board is solvable, attempting to minimize the chances of 50/50 guesses by the player.
@@ -41,7 +43,11 @@ private:
     void placeMines(int safeX, int safeY);
 
     // ========= Inputs ========= //
-    void digCell(int r, int c);
+    void moveCursorUp();
+    void moveCursorRight();
+    void moveCursorDown();
+    void moveCursorLeft();
+    bool digCell(int r, int c); // Returns true if a mine was dug (game over), false otherwise.
     void toggleFlagCell(int r, int c); // Flags if not flagged, unflags if flagged.
     void selectCell(int r, int c);
     void unselectCell(int r, int c);
@@ -54,7 +60,7 @@ private:
 
     // Renders the entire board to the console.
     // Done via calling the print() method of each cell in the grid, along with displaying some extra values.
-    void render() const;
+    void render(string diffName, string_view diffColor) const;
 
     // Checks if the player has won the game by checking if the number of dug cells (`dugCount`) equals the total number of safe cells `totalCells - mineCount`.
     bool hasWon() const;
@@ -69,7 +75,7 @@ public:
     // Begins a loop that runs the current minesweeper game.
     // Returns true if the game was won, false if lost.
     // Afterwards, the Game class will handle transitioning to the appropriate end screen.
-    bool run();
+    bool run(string diffName, string_view diffColor);
 };
 
 #endif // BOARD_H

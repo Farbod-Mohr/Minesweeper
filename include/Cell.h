@@ -13,9 +13,9 @@ using namespace std;
 
 enum CellState
 {
-    NORMAL,   // Rendered as a white square "■".
-    DUG,      // Rendered as a white number indicating adjacent mines or a "." if zero.
-    FLAGGED,  // Rendered as a orange flag "⚑".
+    NORMAL,   // Rendered as a white square "+".
+    DUG,      // Rendered as a white number indicating adjacent mines or a " " if zero.
+    FLAGGED,  // Rendered as a orange flag "F".
     EXPLODED, // Rendered as an red "X". Game ends shortly after a cell explodes.
     WALL      // Purely to make board rendering easier. It is rendered as a "#" and cannot be selected or interacted with.
     // Whatever the selected board size is, it is increased by 2 in both axis, the first and last rows and columns being walls.
