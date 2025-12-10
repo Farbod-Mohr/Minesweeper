@@ -84,19 +84,19 @@ void Game::renderMainMenu()
         if (uiButtons.MM_newGame) {
             cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "Start New Game" << Color::Reset << endl;
         } else {
-            cout << "   Start New Game" << endl;
+            cout << Color::Dim << "   Start New Game" << Color::Reset << endl;
         }
 
         if (uiButtons.MM_highScores) {
             cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "High Scores" << Color::Reset << endl;
         } else {
-            cout << "   High Scores" << endl;
+            cout << Color::Dim << "   High Scores" << Color::Reset << endl;
         }
 
         if (uiButtons.MM_exit) {
             cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "Exit" << Color::Reset << endl;
         } else {
-            cout << "   Exit" << endl;
+            cout << Color::Dim << "   Exit" << Color::Reset << endl;
         }
 
         // Get user input for menu navigation
@@ -178,19 +178,19 @@ void Game::renderDiffSelection()
         if (uiButtons.DS_easy) {
             cout << Color::Bold << Color::BrightGreen << "  > " << Color::Underline << "Easy" << Color::Reset << printDiff(Difficulty.at("Easy")) << endl;
         } else {
-            cout << Color::Green << "   Easy" << Color::Reset << endl;
+            cout << Color::Dim << Color::Green << "   Easy" << Color::Reset << endl;
         }
 
         if (uiButtons.DS_medium) {
             cout << Color::Bold << Color::BrightYellow << "  > " << Color::Underline << "Medium" << Color::Reset << printDiff(Difficulty.at("Med")) << endl;
         } else {
-            cout << Color::Yellow << "   Medium" << Color::Reset << endl;
+            cout << Color::Dim << Color::Yellow << "   Medium" << Color::Reset << endl;
         }
 
         if (uiButtons.DS_hard) {
             cout << Color::Bold << Color::BrightRed << "  > " << Color::Underline << "Hard" << Color::Reset << printDiff(Difficulty.at("Hard")) << endl;
         } else {
-            cout << Color::Red << "   Hard" << Color::Reset << endl;
+            cout << Color::Dim << Color::Red << "   Hard" << Color::Reset << endl;
         }
 
         Action act = InputHandler::getAction();
