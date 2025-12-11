@@ -60,9 +60,10 @@ void Game::clear() const
 #endif
 }
 
-void const Game::renderExit()
+void Game::renderExit() const
 {
-    cout << endl << Color::Bold << "Thank you for playing! See you next time! :> " << endl;
+    cout << endl
+         << Color::Bold << "Thank you for playing! See you next time! :> " << endl;
 }
 
 string Game::printDiff(const DiffInfo &diff) const
@@ -81,21 +82,30 @@ void Game::renderMainMenu()
 
         // If-else statements are used to determine which button is currently selected and render it accordingly.
 
-        if (uiButtons.MM_newGame) {
+        if (uiButtons.MM_newGame)
+        {
             cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "Start New Game" << Color::Reset << endl;
-        } else {
+        }
+        else
+        {
             cout << Color::Dim << "   Start New Game" << Color::Reset << endl;
         }
 
-        if (uiButtons.MM_highScores) {
+        if (uiButtons.MM_highScores)
+        {
             cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "High Scores" << Color::Reset << endl;
-        } else {
+        }
+        else
+        {
             cout << Color::Dim << "   High Scores" << Color::Reset << endl;
         }
 
-        if (uiButtons.MM_exit) {
+        if (uiButtons.MM_exit)
+        {
             cout << Color::Bold << Color::Cyan << "  > " << Color::Underline << "Exit" << Color::Reset << endl;
-        } else {
+        }
+        else
+        {
             cout << Color::Dim << "   Exit" << Color::Reset << endl;
         }
 
@@ -175,21 +185,30 @@ void Game::renderDiffSelection()
 
         // Yes I know this looks genuinely horrid, awful, and mortifyingly unreadable, but that's the price I'm willing to pay for a good looking UI :D
 
-        if (uiButtons.DS_easy) {
+        if (uiButtons.DS_easy)
+        {
             cout << Color::Bold << Color::BrightGreen << "  > " << Color::Underline << "Easy" << Color::Reset << printDiff(Difficulty.at("Easy")) << endl;
-        } else {
+        }
+        else
+        {
             cout << Color::Dim << Color::Green << "   Easy" << Color::Reset << endl;
         }
 
-        if (uiButtons.DS_medium) {
+        if (uiButtons.DS_medium)
+        {
             cout << Color::Bold << Color::BrightYellow << "  > " << Color::Underline << "Medium" << Color::Reset << printDiff(Difficulty.at("Med")) << endl;
-        } else {
+        }
+        else
+        {
             cout << Color::Dim << Color::Yellow << "   Medium" << Color::Reset << endl;
         }
 
-        if (uiButtons.DS_hard) {
+        if (uiButtons.DS_hard)
+        {
             cout << Color::Bold << Color::BrightRed << "  > " << Color::Underline << "Hard" << Color::Reset << printDiff(Difficulty.at("Hard")) << endl;
-        } else {
+        }
+        else
+        {
             cout << Color::Dim << Color::Red << "   Hard" << Color::Reset << endl;
         }
 
@@ -320,7 +339,7 @@ void Game::renderGameOver()
         }
         else if (act == QUIT)
         {
-            currentScreen = EXIT;
+            currentScreen = MAIN_MENU;
             return;
         }
     }
@@ -348,7 +367,7 @@ void Game::renderWin()
         }
         else if (act == QUIT)
         {
-            currentScreen = EXIT;
+            currentScreen = MAIN_MENU;
             return;
         }
     }
@@ -371,7 +390,7 @@ void Game::renderHighScores()
         }
         else if (act == QUIT)
         {
-            currentScreen = EXIT;
+            currentScreen = MAIN_MENU;
             return;
         }
     }

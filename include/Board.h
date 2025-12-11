@@ -1,3 +1,6 @@
+#include <string>
+#include <string_view>
+#include <unordered_map>
 #include <vector>
 #include "Cell.h"
 using namespace std;
@@ -35,19 +38,51 @@ private:
     // Returns a reference to the Cell object at the specified row and column.
     Cell &getCell(int r, int c);
 
-    // Places mines randomly on the board, ensuring the cell at (safeX, safeY) is not a mine.
+    // This is an overload of the normal getCell function.
+    // The difference is that this one is a const function and returns a const reference to the Cell object.
+    // This is useful for the mine placement algorithm, which does not modify any cells when checking their states.
+    // The function for mine placements are const functions, so this const overload is needed to avoid compiler errors.
+    const Cell &getCell(int r, int c) const;
+
+    // Places mines randomly on the board, ensuring the cell at (safeX, safeY) along with a 3x3 field around it are not mines.
     // It runs multiple checks to make sure that the board is solvable, attempting to minimize the chances of 50/50 guesses by the player.
-    // When a check fails, it will remove one of the mines from the cluster that made the board unsolvable, blacklist the space it was in from ever having a mine again, and attempts to place it somewhere else.
+    // When a check fails, it will remove one of the mines from the cluster that made the board unsolvable, blacklist the space it was in from ever having a mine again, and attempt to place it somewhere else.
     // This process is repeated until all mines are placed and all the checks pass.
     // If the number of mines that must be placed exeeds the number of available spaces, possibly due to blacklisting, It will subtract the number of excess mines from the total mine count and proceed with placement, starting the game with less mines than requested.
     void placeMines(int safeX, int safeY);
+
+    // ========= Mine Placement Helpers ========= //
+
+    // Checks whether or not adding a mine at a given (r, c) would create a 2x2 block with 3+ mines.
+    // This pattern USUALLY forces unavoidable guesses, so it must be avoided in the mine placement algorithm.
+    // Keyword: USUALLY. There are some rare cases where this pattern is unavoidable, but the algorithm will do its best to prevent it.
+    // There are also cases where this pattern is part of a solvable board, so there are bound to be false positives. However, it is better to be safe than sorry.
+    bool formsTwoByTwo(int r, int c) const;
+
+    // Checks horizontal and vertical lines from a given (r, c) to prevent long 4+ straight chains of mines.
+    // It counts continuous mines in both directions from (r, c).
+    // If 4 or more contiguous mines are found in either direction, it returns true, indicating that placing a mine at (r, c) should be avoided.
+    // Like the other helper function, this is not a perfect check and may produce false positives, but it helps reduce the chances of unsolvable boards.
+    bool formsLongLine(int r, int c) const;
+
+    // checks whether placing a mine at (r, c) would isolate a safe cell and completely by surround it with mines, making it unreachable and thus, unsolvable.
+    // It checks all adjacent cells of each non-mine cell around (r, c) to see if they would all be mines if a mine were placed at (r, c).
+    // If such a situation is found, it returns true, indicating that placing a mine at (r, c) should be avoided.
+    bool trapsSafeCell(int r, int c) const;
+
+    // When placing mines, an unordered_map is used to keep track of blacklisted positions that have already failed checks from the helper functions above.
+    // This function converts coordinate pairs (r, c) into a unique, integer hash key for use in the blacklist.
+    int makeKey(int r, int c) const;
+
+    // Checks if a given position key is inside the blacklist.
+    bool isBlacklisted(int key, const unordered_map<int, bool> &blacklist) const;
 
     // ========= Inputs ========= //
     void moveCursorUp();
     void moveCursorRight();
     void moveCursorDown();
     void moveCursorLeft();
-    bool digCell(int r, int c); // Returns true if a mine was dug (game over), false otherwise.
+    bool digCell(int r, int c);        // Returns true if a mine was dug (game over), false otherwise.
     void toggleFlagCell(int r, int c); // Flags if not flagged, unflags if flagged.
     void selectCell(int r, int c);
     void unselectCell(int r, int c);

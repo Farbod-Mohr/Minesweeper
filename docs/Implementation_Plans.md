@@ -159,7 +159,7 @@
 - `Board::render()`
 - `Board::hasWon()`
 
-## [] Feature 5: Algorythmic Mine Placement
+## [x] ~~Feature 5: Algorythmic Mine Placement~~ COMPLETED
 
 **Trigger**: User digs their first cell in a new game.
 

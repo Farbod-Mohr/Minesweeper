@@ -60,7 +60,7 @@ struct DiffInfo
 
 // An unordered map that connects difficulty names to their respective DiffInfo structs.
 const unordered_map<string, DiffInfo> Difficulty = {
-    {"Easy", {"EASY", 7, 7, 8}},
+    {"Easy", {"EASY", 9, 9, 10}},
     {"Med", {"MEDIUM", 16, 16, 40}},
     {"Hard", {"HARD", 16, 30, 99}}};
 
@@ -130,7 +130,7 @@ private:
     void renderGameOver();
     void renderWin();
     void renderHighScores();
-    void const renderExit();
+    void renderExit() const;
 
 public:
     // Starts the main game loop, creating any needed objects and begins the process of rendering and input handling.
