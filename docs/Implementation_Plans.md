@@ -70,7 +70,7 @@
 2. Call the `Game::renderDiffSelection()` function. This displays difficulty options: Easy, Medium, and Hard.
 3. Use the principals mentioned in Feature 1 to navigate the UI.
 4. When the user selects one of these options, get the respective preset `DiffInfo` object from the `Difficulty` hash map in the game class. Use this info to initialize a `Board` object with the appropriate rows, columns, and mine count via `Game::startNewGame(DiffInfo selected_diff)`. The `currentDiff` variable in the Game class should also be set to the selected difficulty's `DiffInfo` object for later use in score calculation.
-5. After the board is initialized, the `startTime` variable in the Game class should be set to the current OS time to start tracking how long the game takes.
+5. After the board is initialized, the `startTime` variable in the Game class should be set to the current time to start tracking how long the game takes.
 6. Lastly, the `Board::run()` will be called to begin the game loop.
 
 ***IMPORTANT NOTE***: MINE PLACEMENT LOGIC IS NOT PART OF THIS FEATURE, AS THEY WILL HAVE TO BE PLACED WHEN THE PLAYER DIGS THEIR FIRST CELL. THIS IS TO ENSURE THE PLAYER DOES NOT DIG A MINE ON THEIR FIRST MOVE.
@@ -187,7 +187,7 @@
 
 - `Board::placeMines(int safeX, int safeY)`
 
-## [] Feature 6: Game Timer
+## [x] ~~Feature 6: Game Timer~~ COMPLETED
 
 **Trigger**: User starts a new game.
 
@@ -196,13 +196,12 @@
 **Implementation Flow**:
 
 1. In the `Game` class, implement a system to track the time taken for each game.
-2. When a new game starts, record the current OS time in the `startTime` variable (mentioned in Feature 2).
-3. When the game ends (either by winning or losing), record the current OS time in the `endTime` variable.
+2. When a new game starts, record the current time in the `startTime` variable (mentioned in Feature 2).
+3. When the game ends by winning, record the time the game ended in the `endTime` variable.
 4. Calculate the total time taken for the game by subtracting `startTime` from `endTime` and returning it in the form of a formatted string (HH:MM:SS). This is done via the `calcTime()` function.
 5. The time taken will be displayed on the WIN screen after the player successfully clears the board.
-6. After the time is calculated and displayed, it along with the difficulty selected (`currentDiff`) will be sent to the HighScoreSaver class to be recorded as a high score if applicable.
 
-## [] Feature 7: High Score Tracking
+## [x] ~~Feature 7: High Score Tracking~~ COMPLETED
 
 **Trigger**: User wins a game.
 
@@ -210,7 +209,7 @@
 
 **Implementation Flow**:
 
-1. In the `Game` class, implement the `saveScore(string total_time)` function that is called when the user wins a game. This function will be called inside of the `calcTime()` function after the total time is calculated.
+1. In the `Game` class, implement the `saveScore(string total_time)` function that is called when the user wins a game. This function will be called after the total time is calculated via the `calcTime()` function.
 2. This function should pass the time taken to beat the game along with the current difficulty level (`currentDiff`) to the `HighScoreSaver::addScore(string time, DiffInfo difficulty)` function.
 3. The ``HighScoreSaver::addScore(string time, DiffInfo difficulty)` function must:
     - Check if the new score is better than any of the existing scores in the list for that difficulty. This will be done by converting the time string (HH:MM:SS) into total seconds for easier comparison.
@@ -234,3 +233,7 @@
 - `HighScoreSaver::addScore(string time, DiffInfo difficulty)`
 - `HighScoreSaver::saveToFile()`
 - `HighScoreSaver::loadFromFile()` will also now be called on program start to load existing high scores into the `highScores` array.
+
+------------
+
+## ALL DONE! yayyyyyyy yippieee wahoooo

@@ -1,16 +1,19 @@
-#define _CRT_SECURE_NO_WARNI
 #include "../include/Game.h"
 #include "../include/InputHandler.h"
 #include "../include/Color.h"
 #include "../include/Board.h"
-#include <ctime>
 #include <chrono>
 #include <iostream>
-#include <cstdlib> // For system("clear") and system("cls")
+#include <cstdlib>
+#include <iomanip>
+#include <sstream>
 using namespace std;
 
 void Game::init()
 {
+    // Load high scores from file on program start
+    highScoreSaver.loadFromFile();
+
     bool gameRunning = true;
     // Main game loop
     while (gameRunning)
@@ -32,7 +35,7 @@ void Game::init()
             renderMinesweeper();
             break;
         case LOSS:
-            renderGameOver();
+            renderLoss();
             break;
         case WIN:
             renderWin();
@@ -77,7 +80,7 @@ void Game::renderMainMenu()
     {
         Game::clear();
 
-        cout << Color::Bold << Color::BrightGreen << "=====|||  MAIN MENU  |||=====" << Color::Reset << endl;
+        cout << Color::Bold << Color::BrightMagenta << "=====|||  MAIN MENU  |||=====" << Color::Reset << endl;
         cout << endl;
 
         // If-else statements are used to determine which button is currently selected and render it accordingly.
@@ -170,20 +173,14 @@ void Game::renderMainMenu()
     }
 }
 
-// ? ======================================================== ? //
-// ! Placeholder implementations for some rendering functions ! //
-// ? ======================================================== ? //
-
 void Game::renderDiffSelection()
 {
     while (true)
     {
         Game::clear();
 
-        cout << Color::Bold << Color::BrightGreen << "=====|||  SELECT YOUR DIFFICULTY  |||=====" << Color::Reset << endl;
+        cout << Color::Bold << Color::BrightMagenta << "=====|||  SELECT YOUR DIFFICULTY  |||=====" << Color::Reset << endl;
         cout << endl;
-
-        // Yes I know this looks genuinely horrid, awful, and mortifyingly unreadable, but that's the price I'm willing to pay for a good looking UI :D
 
         if (uiButtons.DS_easy)
         {
@@ -286,13 +283,13 @@ void Game::renderDiffSelection()
     }
 }
 
-Board Game::makeNewGame(DiffInfo selected_diff)
+Board Game::makeNewBoard(DiffInfo selected_diff)
 {
     // Initialize a new Board object with the selected difficulty's info.
     Board newBoard(selected_diff.row, selected_diff.column, selected_diff.mineCount);
 
-    auto now = chrono::system_clock::now();
-    startTime = chrono::system_clock::to_time_t(now);
+    // When a new board is made, note down the current time as the start time for the game.
+    startTime = chrono::steady_clock::now();
 
     return newBoard;
 }
@@ -303,14 +300,15 @@ void Game::renderMinesweeper()
     {
         Game::clear();
 
-        Board newBoard = makeNewGame(currentDiff);
+        Board newBoard = makeNewBoard(currentDiff);
 
         bool won = newBoard.run(currentDiff.name, currentDiff.diffColor);
 
         if (won)
         {
-            auto now = chrono::system_clock::now();
-            endTime = chrono::system_clock::to_time_t(now);
+            // When the game ends in a win, note down the current time as the end time for the game.
+            endTime = chrono::steady_clock::now();
+
             currentScreen = WIN;
             return;
         }
@@ -322,22 +320,42 @@ void Game::renderMinesweeper()
     }
 }
 
-void Game::renderGameOver()
+string Game::calcTime()
+{
+    // Calculate the elapsed time in seconds between start and end
+    chrono::steady_clock::duration timeTaken = endTime - startTime;
+
+    // Convert the duration to seconds
+    chrono::seconds timeTakenInSeconds = chrono::duration_cast<chrono::seconds>(timeTaken);
+
+    // Calculate the total seconds spent on the game
+    long long totalSeconds = timeTakenInSeconds.count();
+
+    // Return the formatted time string
+    return secondsFormat(totalSeconds);
+}
+
+void Game::saveScore(string total_time)
+{
+    highScoreSaver.addScore(total_time, currentDiff);
+}
+
+void Game::renderLoss()
 {
     while (true)
     {
         Game::clear();
+
         cout << Color::Bold << Color::BrightRed << "=====|||  GAME OVER  |||=====" << Color::Reset << endl;
         cout << endl;
-        cout << "Game Over Screen (Not Yet Implemented)" << endl;
+
+        cout << "Oops, You hit a mine! Better luck next time!" << endl;
+        cout << endl;
+
+        cout << "Press any button to return to the Main Menu..." << Color::Reset;
 
         Action act = InputHandler::getAction();
-        if (act == DIG)
-        {
-            currentScreen = MAIN_MENU;
-            return;
-        }
-        else if (act == QUIT)
+        if (act != UNKNOWN)
         {
             currentScreen = MAIN_MENU;
             return;
@@ -350,22 +368,23 @@ void Game::renderWin()
     while (true)
     {
         Game::clear();
+
         cout << Color::Bold << Color::BrightGreen << "=====|||  YOU WIN!  |||=====" << Color::Reset << endl;
         cout << endl;
 
-        cout << "Congrats! You won on " << currentDiff.name << " mode!" << endl;
+        cout << Color::Bold << "Congrats! You won on " << currentDiff.diffColor << currentDiff.name << Color::Reset << Color::Bold << " mode!" << endl;
 
-        // The function to calculate the time taken will be implemented later. This is just a test for now.
-        // cout << "Your start time was: " << ctime(&startTime);
-        // cout << "Your end time was: " << ctime(&endTime);
+        string timeStr = calcTime();
+        cout << Color::Bold << "Time Taken: " << timeStr << endl;
+        cout << endl;
+
+        // Send the score to the HighScoreSaver to be saved if appropriate.
+        saveScore(timeStr);
+
+        cout << "Press any button to return to the Main Menu..." << Color::Reset;
 
         Action act = InputHandler::getAction();
-        if (act == DIG)
-        {
-            currentScreen = MAIN_MENU;
-            return;
-        }
-        else if (act == QUIT)
+        if (act != UNKNOWN)
         {
             currentScreen = MAIN_MENU;
             return;
@@ -373,22 +392,61 @@ void Game::renderWin()
     }
 }
 
+string Game::secondsFormat(long long seconds) const
+{
+    // If the score is 0, it means there is no recorded score, so return "--------"
+    if (seconds == 0)
+    {
+        return "--------";
+    }
+
+    const long long hours = seconds / 3600;
+    const long long minutes = (seconds % 3600) / 60;
+    const long long secs = seconds % 60;
+
+    // ! AI GENERATED CODE START ! //
+    // ? Prompt: Showed Gemeni the function along with the message: ? //
+    // ? "I need this function to return a string formatted in HH:MM:SS of the current time variables. ? //
+    // Formats the time as HH:MM:SS and returns it.
+
+    stringstream ss;
+    ss << setfill('0') << setw(2) << hours << ":" << setfill('0') << setw(2) << minutes << ":" << setfill('0') << setw(2) << secs;
+    return ss.str();
+
+    // ! AI GENERATED CODE END ! //
+}
+
 void Game::renderHighScores()
 {
     while (true)
     {
         Game::clear();
-        cout << Color::Bold << Color::BrightGreen << "=====|||  HIGH SCORES  |||=====" << Color::Reset << endl;
+        cout << Color::Bold << Color::BrightMagenta << "=====|||  HIGH SCORES  |||=====" << Color::Reset << endl;
         cout << endl;
-        cout << "High Scores Screen (Not Yet Implemented)" << endl;
+
+        // A For-Each loop to go through each difficulty and print its high scores.
+        // ! LOOKED UP HOW TO LOOP THROUGH AN UNORDERED_MAP VIA GEMENI ! //
+        for (const auto &[diffName, diffInfo] : Difficulty)
+        {
+            // The difficulty name
+            cout << Color::Bold << diffInfo.diffColor << diffInfo.name << Color::Reset << endl;
+
+            // Get highscores for this difficulty
+            const int *scores = highScoreSaver.getHighScores(diffInfo);
+
+            // Print each of the 5 high scores for this difficulty
+            for (int i = 0; i < 5; i++)
+            {
+                cout << "  " << (i + 1) << ". " << secondsFormat(scores[i]) << endl;
+            }
+
+            cout << endl;
+        }
+
+        cout << "Press any button to return to the Main Menu..." << Color::Reset;
 
         Action act = InputHandler::getAction();
-        if (act == DIG)
-        {
-            currentScreen = MAIN_MENU;
-            return;
-        }
-        else if (act == QUIT)
+        if (act != UNKNOWN)
         {
             currentScreen = MAIN_MENU;
             return;

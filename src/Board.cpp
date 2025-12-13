@@ -1,6 +1,7 @@
 #include <chrono>
 #include <iostream>
 #include <random>
+#include <thread>
 #include <unordered_map>
 #include "../include/Board.h"
 #include "../include/Color.h"
@@ -111,6 +112,14 @@ bool Board::run(string diffName, string_view diffColor)
 
             if (hitMine)
             {
+                // If a mine was hit, re-render the board to show the exploded cell.
+                selectedCell = nullptr; // Deselect the current cell to show it exploded with proper colors.
+                clear();
+                render(diffName, diffColor);
+
+                // Pause for 2 seconds to let the player see the exploded cell before ending the game.
+                this_thread::sleep_for(chrono::seconds(2));
+
                 return false; // Game lost
             }
 
@@ -443,7 +452,7 @@ void Board::placeMines(int safeX, int safeY)
     // ! CODE FROM STACKOVERFLOW ! //
     // Creates a seeded random number generator based on the current time for random number generation.
     // The shuffle function needs this to randomize the candidates list.
-    mt19937 rng = std::mt19937(static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count()));
+    mt19937 rng = mt19937(static_cast<unsigned int>(chrono::steady_clock::now().time_since_epoch().count()));
 
     // ! CODE FROM STACKOVERFLOW ! //
     // Shuffle the candidates list to randomize mine placement.
@@ -548,7 +557,7 @@ void Board::placeMines(int safeX, int safeY)
 void Board::render(string diffName, string_view diffColor) const
 {
 
-    cout << Color::Bold << "=====|||  MINESWEEPER  |||=====" << Color::Reset << endl;
+    cout << Color::Bold << Color::BrightMagenta << "=====|||  MINESWEEPER  |||=====" << Color::Reset << endl;
 
     // Easy and Hard have two less letters than medium, so extra space is added on the sides for alignment.
     if (diffName == "EASY" || diffName == "HARD")

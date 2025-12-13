@@ -1,7 +1,8 @@
 #include <string>
-#include <fstream>
-#include "Game.h"
 using namespace std;
+
+// Forward declaration to avoid circular includes
+struct DiffInfo;
 
 /*
 ? Description: The HighScoreSaver class is responsible for managing the high scores of the game.
@@ -15,14 +16,21 @@ using namespace std;
 class HighScoreSaver
 {
 private:
-    static const int MAX_SCORES = 5;                        // Keeps top 5 high scores for a given difficulty.
-    const string SAVEFILE = "../HighScores/highscores.txt"; // The path of the file in which highscores will be kept.
-    int highScores[3][MAX_SCORES] = {};                     // Array to store high scores for each difficulty.
+    static const int MAX_SCORES = 5;                           // Keeps top 5 high scores for a given difficulty.
+    const string SAVEFILE = "../../HighScores/highscores.txt"; // The path of the file in which highscores will be kept.
+    int highScores[3][MAX_SCORES] = {};                        // Array to store high scores for each difficulty.
+
+    // Helper function that converts HH:MM:SS string to total seconds. Used for comparing and storing scores.
+    int timeStringToSeconds(const string &timeStr) const;
+
+    // Helper function that converts difficulty names into indexes for easier sorting and use in the `HighScores` array.
+    // Easy is 0, Medium is 1, and Hard is 2.
+    int getDifficultyIndex(DiffInfo difficulty) const;
 
 public:
     // Adds a new score to the highScores array for the specified difficulty. If the array exceeds MAX_SCORES, it removes the lowest score.
     void addScore(string time, DiffInfo difficulty);
-    
+
     // Saves the current highScores array to the highscores.txt file.
     void saveToFile();
 

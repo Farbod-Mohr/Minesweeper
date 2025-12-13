@@ -15,6 +15,7 @@ set(
     src/Board.cpp
     src/Cell.cpp
     src/InputHandler.cpp
+    src/HighScoreSaver.cpp
 )
 
 # Create executable  

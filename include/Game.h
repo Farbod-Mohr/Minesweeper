@@ -1,7 +1,9 @@
 #include <string>
 #include <unordered_map>
+#include <chrono>
 #include "../include/Color.h"
 #include "../include/Board.h"
+#include "../include/HighScoreSaver.h"
 using namespace std;
 
 /*
@@ -51,27 +53,23 @@ struct DiffInfo
         {
             diffColor = Color::BrightRed;
         }
-        else // To handle the default "Nil" difficulty.
-        {
-            diffColor = Color::White;
-        }
     }
 };
 
 // An unordered map that connects difficulty names to their respective DiffInfo structs.
 const unordered_map<string, DiffInfo> Difficulty = {
-    {"Easy", {"EASY", 9, 9, 10}},
+    {"Easy", {"EASY", 9, 9, 8}},
     {"Med", {"MEDIUM", 16, 16, 40}},
     {"Hard", {"HARD", 16, 30, 99}}};
 
 class Game
 {
 private:
-    Screen currentScreen = MAIN_MENU; // The current screen the player is on. Always starts at the main menu.
-    time_t startTime = 0;             // The time at which the game started. This will be used to figure out how long a game takes.
-    time_t endTime = 0;               // The time at which the game ended. This will be used to figure out how long a game takes.
-
+    Screen currentScreen = MAIN_MENU;                // The current screen the player is on. Always starts at the main menu.
+    chrono::steady_clock::time_point startTime{};    // The time at which the game started. This will be used to figure out how long a game takes.
+    chrono::steady_clock::time_point endTime{};      // The time at which the game ended. This will be used to figure out how long a game takes.
     DiffInfo currentDiff = DiffInfo{"Nil", 0, 0, 0}; // The difficulty selected for the current game. Used to create the board and calculate score.
+    HighScoreSaver highScoreSaver;                   // Manages high score saving and loading.
 
     // struct holding boolean values for each button in the UI.
     // These will be set to true when the corresponding button is selected, changing the rendering from white to bright cyan.
@@ -90,15 +88,6 @@ private:
         bool DS_medium = false;
         bool DS_hard = false;
 
-        // Game Over
-        bool GO_return = false;
-
-        // Win
-        bool W_return = false;
-
-        // High Scores
-        bool HS_return = false;
-
     } uiButtons;
 
     // The function to clear the screen is different based on the operating system, so this function handles that.
@@ -107,27 +96,30 @@ private:
     // Makes the Board for a new game with the selected difficulty.
     // It creates a new Board object with the appropriate parameters and resets the timer.
     // It then returns the created Board object to be run.
-    Board makeNewGame(DiffInfo selected_diff);
+    Board makeNewBoard(DiffInfo selected_diff);
 
     // Returns a formatted string of the total time taken for the current game via the `startTime` and `endTime` variables.
     // The timer isn't actually displayed during gameplay, due to the unfortunate fact that the methods to get user input are halting functions.
-    // A player's time will only be shown on the WIN screen after they successfully clear the board.
-    // Yes, this means that the user can TECHNICALLY cheat by changing their system clock to have a negative time taken, but they would never do that... right? >->
+    // A player's time will only be shown on the WIN screen after they successfully clear the board, and then be saved as a high score if applicable.
+    // This function uses chrono::steady_clock to calculate the time difference, which I found out about on W3Schools. This library keeps track of time using its own internal clock, so it will not affected by changes to the system time. It is also compatible with windows, linux and unix.
     string calcTime();
 
     // Sends both the time taken to beat the game (as decided by the `calcTime()` function) and the `currentDiff` variable to the HighScoreSaver class to be saved.
-    // The HighScoreSaver aver class will handle saving the score if appropriate.
+    // The HighScoreSaver class will handle saving the score if appropriate.
     // A 'score' is just the time taken to beat a given difficulty. The 5 best times for each difficulty are kept as high scores.
     void saveScore(string total_time);
 
-    // A helper function that returns a formatted string representing the given DiffInfo struct. Useful for rendering difficulty information in the UI.
+    // A helper function that returns a formatted string representing the given DiffInfo struct. Used for rendering difficulty information in the UI.
     string printDiff(const DiffInfo &diff) const;
+
+    // Takes a given number of seconds and returns it formatted as a string in HH:MM:SS.
+    string secondsFormat(long long seconds) const;
 
     // ======== Rendering Functions ========= //
     void renderMainMenu();
     void renderDiffSelection();
     void renderMinesweeper();
-    void renderGameOver();
+    void renderLoss();
     void renderWin();
     void renderHighScores();
     void renderExit() const;

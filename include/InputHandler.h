@@ -28,7 +28,6 @@ enum Action
 class InputHandler
 {
 private:
-
     // An unordered map that connects key presses to their respective Action enums.
     static const unordered_map<int, Action> keyMap;
 
