@@ -80,7 +80,16 @@ void Game::renderMainMenu()
     {
         Game::clear();
 
-        cout << Color::Bold << Color::BrightMagenta << "=====|||  MAIN MENU  |||=====" << Color::Reset << endl;
+        cout << Color::Bold << Color::BrightMagenta << "=====|||  MAIN MENU  |||=====" << Color::Reset << endl << endl;
+
+        cout << "------------------------------------" << endl;
+        cout << Color::Bold << "Controls: " << Color::Reset << endl;
+        cout << " Use " << Color::Underline << "WASD" << Color::Reset << " or " << Color::Underline << "Arrow Keys" << Color::Reset << " to navigate the menus and the minesweeper board." << endl;
+        cout << " Press " << Color::Underline << "'E'" << Color::Reset << ", " << Color::Underline << "Space" << Color::Reset << " or " << Color::Underline << "Enter" << Color::Reset << " to select a menu option or dig a cell." << endl;
+        cout << " Press " << Color::Underline << "'Q'" << Color::Reset << " to flag/unflag a cell." << endl;
+        cout << " Press " << Color::Underline << "Esc" << Color::Reset << " to return to a previous menu / exit your current game at any time." << endl;
+        cout << "------------------------------------" << endl;
+
         cout << endl;
 
         // If-else statements are used to determine which button is currently selected and render it accordingly.

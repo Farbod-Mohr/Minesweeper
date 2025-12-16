@@ -55,24 +55,24 @@ string Cell::print() const
             display = string(Color::White) + display + string(Color::Reset);
             break;
         case DUG:
-        if (adjacentMinesCount == 0)
-            display = string(Color::White) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 1)
-            display = string(Color::BrightBlue) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 2)
-            display = string(Color::Green) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 3)
-            display = string(Color::BrightRed) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 4)
-            display = string(Color::Cyan) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 5)
-            display = string(Color::Red) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 6)
-            display = string(Color::Magenta) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 7)
-            display = string(Color::BrightWhite) + display + string(Color::Reset);
-        else if (adjacentMinesCount == 8)
-            display = string(Color::Gray) + display + string(Color::Reset);
+            if (adjacentMinesCount == 0)
+                display = string(Color::White) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 1)
+                display = string(Color::BrightBlue) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 2)
+                display = string(Color::Green) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 3)
+                display = string(Color::BrightRed) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 4)
+                display = string(Color::Cyan) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 5)
+                display = string(Color::Red) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 6)
+                display = string(Color::Magenta) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 7)
+                display = string(Color::BrightWhite) + display + string(Color::Reset);
+            else if (adjacentMinesCount == 8)
+                display = string(Color::Gray) + display + string(Color::Reset);
             break;
         case FLAGGED:
             display = string(Color::Yellow) + display + string(Color::Reset);

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <random>
@@ -100,8 +101,7 @@ bool Board::run(string diffName, string_view diffColor)
             break;
 
         case DIG:
-        { // ! WIP ! //
-
+        {
             if (!minesPlaced)
             {
                 minesPlaced = true;
@@ -113,7 +113,8 @@ bool Board::run(string diffName, string_view diffColor)
             if (hitMine)
             {
                 // If a mine was hit, re-render the board to show the exploded cell.
-                selectedCell = nullptr; // Deselect the current cell to show it exploded with proper colors.
+                selectedCell->setSelected(false); // Unselect the cell so the mine explosion renders with the correct color.
+                selectedCell = nullptr;
                 clear();
                 render(diffName, diffColor);
 
@@ -496,6 +497,7 @@ void Board::placeMines(int safeX, int safeY)
         // If this position is blacklisted, skip it.
         if (isBlacklisted(makeKey(r, c), blacklist))
         {
+            maxRerolls--;
             continue;
         }
 
@@ -505,6 +507,7 @@ void Board::placeMines(int safeX, int safeY)
         // Skip if a mine is already placed at this position.
         if (cell.hasMine)
         {
+            maxRerolls--;
             continue;
         }
 
@@ -541,7 +544,7 @@ void Board::placeMines(int safeX, int safeY)
         minesRemaining = mineCount - flagCount;
 
         // Notify the player that some mines were removed to ensure the board is solvable.
-        cout << Color::Magenta << "Oops! The hungry hungry caterpillar ate " << eatenMines << " mine" << (eatenMines == 1 ? "" : "s") << " while placing the mines! That's my bad... :[" << Color::Reset << endl;
+        cout << Color::Magenta << " Oops! The hungry hungry caterpillar ate " << eatenMines << " mine" << (eatenMines == 1 ? "" : "s") << " while we were creating your board! That's my bad... :[ " << Color::Reset << endl;
     }
     else
     {

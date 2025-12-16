@@ -1,4 +1,5 @@
 #include "../include/InputHandler.h"
+#include <cstdio>
 
 // Mapping key presses to Action enums.
 const unordered_map<int, Action> InputHandler::keyMap = {
@@ -45,7 +46,9 @@ int InputHandler::getkey()
     return _getch();
 #else
     // Linux/Unix: Use termios to capture key press without echo, mimicking _getch()
-    // ! AI GENERATED CODE START ! // ! NEEDS TESTING ! //
+    // ! AI GENERATED CODE START ! //
+    // ? Prompt: Showed Gemeni the function header along with the message: ? //
+    // ? How could I write the same function that _getch() does on Windows but for Linux/Unix systems? ? //
     struct termios oldt, newt;
     int ch;
     tcgetattr(STDIN_FILENO, &oldt);
@@ -53,9 +56,35 @@ int InputHandler::getkey()
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
     ch = getchar();
+
+    // Handle escape sequences for arrow keys
+    if (ch == 27) // ESC
+    {
+        int next = getchar();
+        if (next == '[')
+        {
+            int arrow = getchar();
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+            switch (arrow)
+            {
+            case 'A':
+                return 72; // Up
+            case 'B':
+                return 80; // Down
+            case 'C':
+                return 77; // Right
+            case 'D':
+                return 75; // Left
+            }
+            return 27; // Unknown escape sequence
+        }
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        return 27; // Just ESC key
+    }
+
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     return ch;
-    // ! AI GENERATED CODE END ! // ! NEEDS TESTING ! //
+    // ! AI GENERATED CODE END ! //
 #endif
 }
 

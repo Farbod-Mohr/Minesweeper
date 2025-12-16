@@ -17,7 +17,8 @@ using namespace std;
 
 class Board
 {
-private:
+// Instead of private, protected is used here to allow the TestBoard subclass to access these members for CTest purposes.
+protected:
     // A 2d vector holding the grid of Cell objects.
     // The board size will be (rows+2) x (cols+2) to make room for the WALL cells.
     vector<vector<Cell>> grid;

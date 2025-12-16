@@ -1,7 +1,7 @@
 #include <string>
 using namespace std;
 
-// Forward declaration to avoid circular includes
+// DiffInfo is declared here to avoid circular dependency issues. If I were to include the Game class here, it would cause problems since the Game class also includes HighScoreSaver.
 struct DiffInfo;
 
 /*
@@ -16,9 +16,9 @@ struct DiffInfo;
 class HighScoreSaver
 {
 private:
-    static const int MAX_SCORES = 5;                           // Keeps top 5 high scores for a given difficulty.
-    const string SAVEFILE = "../../HighScores/highscores.txt"; // The path of the file in which highscores will be kept.
-    int highScores[3][MAX_SCORES] = {};                        // Array to store high scores for each difficulty.
+    static const int MAX_SCORES = 5;                     // Keeps top 5 high scores for a given difficulty.
+    const string SAVEFILE = "HighScores/highscores.txt"; // The path of the file in which highscores will be kept (relative to project root).
+    int highScores[3][MAX_SCORES] = {};                  // Array to store high scores for each difficulty.
 
     // Helper function that converts HH:MM:SS string to total seconds. Used for comparing and storing scores.
     int timeStringToSeconds(const string &timeStr) const;

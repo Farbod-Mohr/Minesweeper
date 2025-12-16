@@ -1,6 +1,8 @@
 #include "../include/HighScoreSaver.h"
 #include "../include/Game.h"
 #include <fstream>
+#include <cstdio>
+#include <iostream>
 using namespace std;
 
 int HighScoreSaver::timeStringToSeconds(const string &time_string) const
@@ -11,11 +13,15 @@ int HighScoreSaver::timeStringToSeconds(const string &time_string) const
 
     int hours = 0, minutes = 0, seconds = 0;
 
+#ifdef _WIN32
     sscanf_s(time_string.c_str(), "%d:%d:%d", &hours, &minutes, &seconds);
+#else
+    sscanf(time_string.c_str(), "%d:%d:%d", &hours, &minutes, &seconds);
+#endif
 
     return hours * 3600 + minutes * 60 + seconds;
 
-    // ! AI GENERATED CODE START ! //
+    // ! AI GENERATED CODE END ! //
 }
 
 // Helper function to get the difficulty index (0=Easy, 1=Medium, 2=Hard)
@@ -80,50 +86,64 @@ void HighScoreSaver::addScore(string time, DiffInfo difficulty)
 
 void HighScoreSaver::saveToFile()
 {
-    // Attempt to open the file for saving.
-    ofstream file(SAVEFILE);
-
-    // If the file cannot be opened, throw an error.
-    if (!file.is_open())
+    try
     {
-        throw runtime_error("Couldn't open 'highscores.txt' to save your scores! Perhaps the file path is incorrect?");
-    }
+        // Attempt to open the file for saving.
+        ofstream file(SAVEFILE);
 
-    // If the file can be opened, write the high scores to it by looping through the `highScores` array.
-    for (int diff = 0; diff < 3; diff++)
-    {
-        for (int i = 0; i < MAX_SCORES; i++)
+        // If the file cannot be opened, throw an error.
+        if (!file.is_open())
         {
-            file << highScores[diff][i] << "\n";
+            throw runtime_error("Couldn't open 'highscores.txt' to save your scores! Perhaps the file path is incorrect?");
         }
-    }
 
-    // Close the file when done.
-    file.close();
+        // If the file can be opened, write the high scores to it by looping through the `highScores` array.
+        for (int diff = 0; diff < 3; diff++)
+        {
+            for (int i = 0; i < MAX_SCORES; i++)
+            {
+                file << highScores[diff][i] << "\n";
+            }
+        }
+
+        // Close the file when done.
+        file.close();
+    }
+    catch (const runtime_error &e)
+    {
+        cerr << "Error: " << e.what() << endl;
+    }
 }
 
 void HighScoreSaver::loadFromFile()
 {
-    // Attempt to open the file for reading.
-    ifstream file(SAVEFILE);
-
-    // If the file cannot be opened, throw an error.
-    if (!file.is_open())
+    try
     {
-        throw runtime_error("Couldn't open 'highscores.txt' to load your scores! Perhaps the file path is incorrect?");
-    }
+        // Attempt to open the file for reading.
+        ifstream file(SAVEFILE);
 
-    // If the file can be opened, load the high scores into the `highScores` array by looping through it.
-    for (int diff = 0; diff < 3; diff++)
-    {
-        for (int i = 0; i < MAX_SCORES; i++)
+        // If the file cannot be opened, throw an error.
+        if (!file.is_open())
         {
-            file >> highScores[diff][i];
+            throw runtime_error("Couldn't open 'highscores.txt' to load your scores! Perhaps the file path is incorrect?");
         }
-    }
 
-    // Close the file when done.
-    file.close();
+        // If the file can be opened, load the high scores into the `highScores` array by looping through it.
+        for (int diff = 0; diff < 3; diff++)
+        {
+            for (int i = 0; i < MAX_SCORES; i++)
+            {
+                file >> highScores[diff][i];
+            }
+        }
+
+        // Close the file when done.
+        file.close();
+    }
+    catch (const runtime_error &e)
+    {
+        cerr << "Error: " << e.what() << endl;
+    }
 }
 
 const int *HighScoreSaver::getHighScores(DiffInfo difficulty) const

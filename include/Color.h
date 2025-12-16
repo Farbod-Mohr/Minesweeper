@@ -8,7 +8,7 @@ using namespace std;
 ! THIS FILE HAS BEEN GENERATED VIA AN AI PROGRAM AND IS NOT MY OWN WORK, NOR DO I CLAIM IT TO BE.
 ! I AM INCLUDING IT HERE TO MAKE THE RENDERING OF THE MINESWEEPER BOARD PRETTIER AND MORE COLORFUL.
 ? Description: The Color namespace contains ANSI escape codes for various text colors, background colors, and text styles.
-* These will be used in the rendering of the minesweeper board within the terminal.
+* These will be used in the rendering of most UI within the terminal.
 
 ??? Example Usage:
 ```cpp

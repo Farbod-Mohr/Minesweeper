@@ -1,4 +1,9 @@
+#ifdef _WIN32
 #include <conio.h>
+#else
+#include <termios.h>
+#include <unistd.h>
+#endif
 #include <unordered_map>
 using namespace std;
 
