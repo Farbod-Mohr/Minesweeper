@@ -1,4 +1,0 @@
-BoardRenderingTests 2 0.00379498
-MinePlacementTests 2 0.00404576
-HighScoreTests 2 0.00326099
----
